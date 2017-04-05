@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <sstream>
 
 using namespace std;
 
@@ -34,7 +35,9 @@ string binarytoGray(string binary) {
 		char prevChar = *(it - 1);
 		char currChar = *it;
 		int xor_curr_prev = xor_two_chars(&currChar,&prevChar);
-		toGray.append(to_string(xor_curr_prev));
+		stringstream ss;
+		ss << xor_curr_prev;
+		toGray.append(ss.str());
 		}
 	}
 
@@ -46,32 +49,48 @@ string binarytoGray(string binary) {
 string graytoBinary(string gray) {
 	// Write your code below this line.
 	string toBinary;
+	string::iterator toBinary_end;
 	for(string::iterator it = gray.begin(); it !=gray.end(); ++it){
+		char last_char;
 		if(it == gray.begin()){
 			toBinary.push_back(*it);
+			last_char = *it;
 		} 
 		else {
-			char curr_char = *it;
-			int curr_char_int = atoi(&curr_char);
+			char curr_gray_char = *it;
+			int curr_char_int = atoi(&curr_gray_char);
 			if (curr_char_int == 0){
-				char prevChar = *(it - 1 );
-				toBinary.push_back(prevChar);
+				toBinary.push_back(last_char);
 			} else {
-				char prevChar = *(it - 1);
-				string invert_prevChar = to_string(not(atoi(&prevChar)));
-				toBinary.append(invert_prevChar);
+				int last_char_int = atoi(&last_char);
+				if (last_char_int == 0){
+					toBinary.append("1");
+				}else {
+					toBinary.append("0");
+				}
 			}
+			cout << curr_gray_char << "," << toBinary << endl;
 		}
+		last_char = *(toBinary.end() - 1);
 
 	}
 	return toBinary;
 }
 
 int main(int argc, char** argv){
-	string tBin = "0011";
-	string tGray = "01101";
+	//string tBin = "0011";
+	//string tGray = "01101";
 
-	cout << "BinaryToGray " << tBin << ' ' << binarytoGray(tBin) << '\n';
-	cout << "GraytoBinary " << tGray << ' ' << graytoBinary(tGray) << '\n';
+	//cout << "BinaryToGray " << tBin << ' ' << binarytoGray(tBin) << '\n';
+	//cout << "GraytoBinary " << tGray << ' ' << graytoBinary(tGray) << '\n';
+	
+	string inputString;
+	cout << "Enter string: ";
+	cin >> inputString;
+	cout << binarytoGray(inputString) << endl;
+	cout << graytoBinary(inputString) << endl;
+	
+
+
 	return 0;
 }
